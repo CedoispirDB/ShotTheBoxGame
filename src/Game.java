@@ -20,6 +20,8 @@ public class Game extends Canvas implements Runnable {
     private final GameDesign gameDesign;
     private final LostGame lostGame;
 
+    private int x = 0;
+
     public enum STATE {
         Menu,
         Game,
@@ -91,6 +93,7 @@ public class Game extends Canvas implements Runnable {
     }
 
     private void tick() {
+//        tools.d(gameState);
         if (started) {
             if (waiting) {
                 found = mouseInput.checkInputValue();
@@ -100,10 +103,14 @@ public class Game extends Canvas implements Runnable {
                     mouseInput.canClick = false;
                 }
             }
-            gameDesign.getValue(mouseInput.exceed);
-            if (mouseInput.exceed) {
-                tools.d("got here");
+
+            if (mouseInput.valueExceed()) {
                 gameState = STATE.Lost;
+                mouseInput.canClick = false;
+                if(x == 0) {
+                    tools.d("Score: " + mouseInput.getScore());
+                    x++;
+                }
             }
 
         }

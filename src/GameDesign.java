@@ -11,14 +11,9 @@ public class GameDesign {
     private final MouseInput mouseInput = new MouseInput(null, null);
     private final ShotTheBox shotTheBox = new ShotTheBox();
 
-    private boolean exceed = false;
 
     public GameDesign() {
 
-    }
-
-    public void getValue(boolean exceed) {
-        this.exceed = exceed;
     }
 
     public void render(Graphics2D g2d, Graphics g, int die1, int die2) {
@@ -61,44 +56,37 @@ public class GameDesign {
         g.setColor(Color.BLACK);
         g.setFont(fnt);
 
-        if (mouseInput.option(0)) {
-            g.drawString("1", 293, 165);
-        }
-        if (mouseInput.option(1)) {
-            g.drawString("2", 390, 165);
-        }
-        if (mouseInput.option(2)) {
-            g.drawString("3", 487, 165);
-        }
-        if (mouseInput.option(3)) {
-            g.drawString("4", 584, 165);
-        }
-        if (mouseInput.option(4)) {
-            g.drawString("5", 681, 165);
-        }
-        if (mouseInput.option(5)) {
-            g.drawString("6", 778, 165);
-        }
-        if (mouseInput.option(6)) {
-            g.drawString("7", 875, 165);
-        }
-        if (mouseInput.option(7)) {
-            g.drawString("8", 972, 165);
-        }
-        if (mouseInput.option(8)) {
-            g.drawString("9", 1069, 165);
-        }
-
-        //Wrong sum
-
-
-        if (this.exceed) {
-
-
+        if (!mouseInput.valueExceed()) {
+            if (mouseInput.option(0)) {
+                g.drawString("1", 293, 165);
+            }
+            if (mouseInput.option(1)) {
+                g.drawString("2", 390, 165);
+            }
+            if (mouseInput.option(2)) {
+                g.drawString("3", 487, 165);
+            }
+            if (mouseInput.option(3)) {
+                g.drawString("4", 584, 165);
+            }
+            if (mouseInput.option(4)) {
+                g.drawString("5", 681, 165);
+            }
+            if (mouseInput.option(5)) {
+                g.drawString("6", 778, 165);
+            }
+            if (mouseInput.option(6)) {
+                g.drawString("7", 875, 165);
+            }
+            if (mouseInput.option(7)) {
+                g.drawString("8", 972, 165);
+            }
+            if (mouseInput.option(8)) {
+                g.drawString("9", 1069, 165);
+            }
         }
 
         //Dices
-
         g.setColor(Color.BLACK);
         g.fillRect((Game.WIDTH / 2) - 75, Game.HEIGHT / 2, 64, 64);
         g.fillRect((Game.WIDTH / 2) + 75, Game.HEIGHT / 2, 64, 64);
@@ -109,7 +97,6 @@ public class GameDesign {
         g.drawString(String.valueOf(die2), (Game.WIDTH / 2) + 95, (Game.HEIGHT / 2) + 47);
 
         //Roll dices button
-
         g.setColor(Color.RED);
         g.fillRect(70, (Game.HEIGHT / 2), 96, 60);
         g.setColor(Color.BLACK);

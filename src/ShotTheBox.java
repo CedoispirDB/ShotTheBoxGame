@@ -38,8 +38,6 @@ public class ShotTheBox {
         return die2;
     }
 
-    public int getScore(int score) {
-        return 45 - score;
-    }
+
 
 }
