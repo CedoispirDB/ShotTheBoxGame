@@ -1,7 +1,5 @@
 import java.awt.Graphics2D;
 import java.awt.Graphics;
-import java.awt.Color;
-import java.awt.Stroke;
 import java.awt.Canvas;
 import java.awt.image.BufferStrategy;
 
@@ -11,18 +9,32 @@ public class Game extends Canvas implements Runnable {
     public static int HEIGHT = 800;
 
     private Thread thread;
+
     private boolean running = false;
+    public boolean started = false;
+    public boolean found = false;
+    public boolean waiting = true;
 
-    private final ShotTheBox stb = new ShotTheBox();
+    private final ShotTheBox shotTheBox = new ShotTheBox();
     private final MouseInput mouseInput;
-    private final GameDesign gameDesign = new GameDesign();
+    private final GameDesign gameDesign;
+    private final LostGame lostGame;
 
-    private boolean waiting = true;
+    public enum STATE {
+        Menu,
+        Game,
+        Lost
+    }
 
+    public STATE gameState = STATE.Game;
 
     public Game() {
-        int sum = stb.startGame();
-        mouseInput = new MouseInput(sum);
+
+        mouseInput = new MouseInput(shotTheBox, this);
+
+        gameDesign = new GameDesign();
+
+        lostGame = new LostGame();
 
         this.addMouseListener(mouseInput);
 
@@ -79,16 +91,23 @@ public class Game extends Canvas implements Runnable {
     }
 
     private void tick() {
-
-        if (waiting) {
-            boolean found = mouseInput.checkInputValue();
-//            if (found) {
-//            tools.d(found);
-//            }
-            if (found) {
-                waiting = false;
+        if (started) {
+            if (waiting) {
+                found = mouseInput.checkInputValue();
+                if (found) {
+                    tools.d("Found");
+                    waiting = false;
+                    mouseInput.canClick = false;
+                }
             }
+            gameDesign.getValue(mouseInput.exceed);
+            if (mouseInput.exceed) {
+                tools.d("got here");
+                gameState = STATE.Lost;
+            }
+
         }
+
     }
 
     private void render() {
@@ -101,11 +120,15 @@ public class Game extends Canvas implements Runnable {
         Graphics g = bs.getDrawGraphics();
         Graphics2D g2d = (Graphics2D) g;
 
+        if (gameState == STATE.Game) {
+            gameDesign.render(g2d, g, shotTheBox.getDie1(), shotTheBox.getDie2());
+        } else if (gameState == STATE.Lost){
 
-        gameDesign.render(g2d, g);
-
+            lostGame.render(g, g2d);
+        }
 
         g.dispose();
+
         bs.show();
     }
 
